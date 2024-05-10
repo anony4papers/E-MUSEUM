@@ -24,7 +24,6 @@ parser.add_argument('--ori_path', type = str, default = '/home/wchai01/Data/sele
 parser.add_argument('--store_path', type = str, default = '/home/wchai01/Data/generated_imagen')
 parser.add_argument('--exp_name', type = str, default = 'testtest')
 parser.add_argument('--protect_model_name', type = str, default = 'vgg11')
-parser.add_argument('--surrogate_model_name', type = str, default = 'vgg16')
 parser.add_argument('--device', type = str, default = 'cuda:0')
 parser.add_argument('--method', type = str, default = 'fm')
 parser.add_argument('--steps', type = int, default = 100)
@@ -39,8 +38,8 @@ parser.add_argument('--attack_layers', type = list_of_ints, default = [4])
 args = parser.parse_args()
 
 # store experiment info
-exp_info = ['exp_name', 'protected', 'surrogate', 'steps', 'eps', 'step_size', 'description', 'method']
-exp_description = [args.exp_name, args.protect_model_name, args.surrogate_model_name, args.steps, args.eps, args.step_size, 'this is sigmoid(loss) with surrogate model', args.method]
+exp_info = ['exp_name', 'protected', 'steps', 'eps', 'step_size', 'description', 'method']
+exp_description = [args.exp_name, args.protect_model_name, args.steps, args.eps, args.step_size,'test', args.method]
 with open(os.path.join(args.store_path, 'exp_info.csv'),'a') as csvfile:
     csvwriter = csv.writer(csvfile)
     csvwriter.writerow(exp_info)
@@ -52,7 +51,6 @@ if not os.path.exists(generated_folder):
     os.mkdir(generated_folder)
 
 protect_model = getattr(models,args.protect_model_name)(pretrained = True).to(args.device).eval()
-surrogate_model = getattr(models,args.surrogate_model_name)(pretrained = True).to(args.device).eval()
 attack_layers = args.attack_layers
 print(attack_layers)
 if args.method == 'fm':
